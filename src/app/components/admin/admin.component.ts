@@ -1,4 +1,4 @@
-import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -11,9 +11,7 @@ import { CalendarDataService, CalendarDayData } from '../../services/calendar-da
   styleUrl: './admin.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdminComponent {
-  readonly calendarDataService = inject(CalendarDataService);
-
+export class AdminComponent implements OnInit {
   readonly selectedDay = signal<number>(1);
   readonly message = signal<string>('');
   readonly imageFile = signal<File | null>(null);
@@ -23,7 +21,9 @@ export class AdminComponent {
 
   readonly days = Array.from({ length: 32 }, (_, i) => i + 1);
 
-  constructor() {
+  constructor(private readonly calendarDataService: CalendarDataService) {}
+
+  ngOnInit(): void {
     this.loadDayData(1);
   }
 
@@ -37,17 +37,13 @@ export class AdminComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
 
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
-    // Validate file type
     if (!file.type.startsWith('image/')) {
       this.errorMessage.set('Please select an image file');
       return;
     }
 
-    // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       this.errorMessage.set('Image size must be less than 5MB');
       return;
@@ -56,7 +52,6 @@ export class AdminComponent {
     this.imageFile.set(file);
     this.errorMessage.set('');
 
-    // Create preview
     const reader = new FileReader();
     reader.onload = (e) => {
       const result = e.target?.result as string;
@@ -69,12 +64,10 @@ export class AdminComponent {
     const dayData = this.calendarDataService.getDayData(day);
     this.message.set(dayData.message);
 
-    // Load existing image if available
     const imageUrl = this.calendarDataService.getImageUrl(dayData);
     if (imageUrl && imageUrl.startsWith('data:')) {
       this.imagePreview.set(imageUrl);
     } else if (imageUrl) {
-      // For external URLs, try to load them
       this.imagePreview.set(imageUrl);
     } else {
       this.imagePreview.set('');
@@ -96,7 +89,7 @@ export class AdminComponent {
       day,
       display: this.calendarDataService.getDayData(day).display,
       message: msg,
-      imagePath: '', // Not used when imageData is present
+      imagePath: '',
       imageData: this.imagePreview() && this.imagePreview().startsWith('data:')
         ? this.imagePreview()
         : undefined
@@ -107,13 +100,9 @@ export class AdminComponent {
       this.successMessage.set(`Day ${day} saved successfully!`);
       this.errorMessage.set('');
 
-      // Dispatch custom event to notify calendar component
       window.dispatchEvent(new Event('calendar-data-updated'));
 
-      // Clear success message after 3 seconds
-      setTimeout(() => {
-        this.successMessage.set('');
-      }, 3000);
+      setTimeout(() => this.successMessage.set(''), 3000);
     } catch (error) {
       this.errorMessage.set('Failed to save. Please try again.');
     }
@@ -128,20 +117,15 @@ export class AdminComponent {
       this.successMessage.set(`Day ${day} restored to default!`);
       this.errorMessage.set('');
 
-      // Dispatch custom event to notify calendar component
       window.dispatchEvent(new Event('calendar-data-updated'));
 
-      setTimeout(() => {
-        this.successMessage.set('');
-      }, 3000);
+      setTimeout(() => this.successMessage.set(''), 3000);
     }
   }
 
   clearImage(): void {
     this.imageFile.set(null);
     this.imagePreview.set('');
-
-    // Reload the day data to get the original image
     this.loadDayData(this.selectedDay());
   }
 
@@ -150,4 +134,3 @@ export class AdminComponent {
     this.errorMessage.set('');
   }
 }
-
