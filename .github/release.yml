@@ -15,15 +15,15 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: "20.11"
 
       - name: Install dependencies
         run: npm install
 
       - name: Build Angular project
-        run: npm run build -- --configuration production
+        run: npm run build:prod
 
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: dist/your-project-name/**
+          artifacts: dist/advent-calendar/**
