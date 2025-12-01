@@ -17,10 +17,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "main": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
