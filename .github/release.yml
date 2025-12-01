@@ -26,4 +26,4 @@ jobs:
       - name: Create GitHub Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: dist/advent-calendar/browser/**
+          artifacts: dist/**
