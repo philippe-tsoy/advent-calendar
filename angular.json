@@ -25,7 +25,7 @@
             "styles": [
               "src/styles.scss"
             ],
-            "outputPath": "dist/advent-calendar"
+            "outputPath": "dist/"
           },
           "configurations": {
             "production": {
