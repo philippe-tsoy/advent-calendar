@@ -1,0 +1,35 @@
+<div class="calendar-container">
+  <div class="background-image"></div>
+  <div class="calendar-content">
+    <div class="calendar-header">
+      <h1 class="gradient-text">Advent Calendar 2025</h1>
+      <!-- <button class="reset-button" (click)="resetOpenedDays()" type="button">
+        <span class="reset-icon">🔄</span>
+        <span class="reset-text">Reset</span>
+      </button> -->
+    </div>
+    <div class="windows-grid">
+      @for (dayData of calendarDays(); track dayData.day) {
+        <app-window
+          [day]="dayData.day"
+          [display]="dayData.display"
+          [isUnlocked]="isUnlocked(dayData.day)"
+          [isOpened]="isOpened(dayData.day)"
+          [imageUrl]="getImageUrl(dayData)"
+          (open)="onWindowOpen(dayData.day, $event)"
+        />
+      }
+    </div>
+  </div>
+  @if (selectedDay(); as day) {
+    <app-popup
+      [visible]="popupVisible()"
+      [message]="day.message"
+      [imagePath]="getImageUrl(day)"
+      [originX]="popupOriginX()"
+      [originY]="popupOriginY()"
+      (close)="onPopupClose()"
+    />
+  }
+</div>
+

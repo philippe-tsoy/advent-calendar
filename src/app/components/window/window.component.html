@@ -1,0 +1,16 @@
+<div
+  [class]="classString()"
+  (click)="onClick($event)">
+  <div class="door" [class.opened]="state() === 'opened'">
+    <div class="door-front">
+      <span class="day-number">{{ display() || day() }}</span>
+      @if (state() === 'locked') {
+        <div class="lock-icon">🔒</div>
+      }
+    </div>
+  </div>
+  @if (state() === 'opened' && hasValidImage()) {
+      <img [src]="imageUrl()" [alt]="'Day ' + (display() || day())" class="window-image" />
+  }
+</div>
+

@@ -1,0 +1,86 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>🎄 Calendar Admin</h1>
+    <a routerLink="/" class="back-link">← Back to Calendar</a>
+  </div>
+
+  <div class="admin-content">
+    <div class="form-section">
+      <div class="form-group">
+        <label for="day-select">Select Day:</label>
+        <select
+          id="day-select"
+          [value]="selectedDay()"
+          (change)="onDayChange(+$any($event.target).value)"
+          class="day-select"
+        >
+          @for (day of days; track day) {
+            <option [value]="day">Day {{ day }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message-input">Message:</label>
+        <textarea
+          id="message-input"
+          [value]="message()"
+          (input)="message.set($any($event.target).value)"
+          class="message-input"
+          rows="4"
+          placeholder="Enter a message for this day..."
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image-input">Image:</label>
+        <div class="image-upload-section">
+          <input
+            type="file"
+            id="image-input"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="file-input"
+          />
+          @if (imagePreview()) {
+            <div class="image-preview-container">
+              <img [src]="imagePreview()" alt="Preview" class="image-preview" />
+              <button type="button" (click)="clearImage()" class="clear-image-btn">Remove Image</button>
+            </div>
+          } @else {
+            <div class="no-image">No image selected</div>
+          }
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" (click)="save()" class="save-btn">Save Day {{ selectedDay() }}</button>
+        <button type="button" (click)="delete()" class="delete-btn">Restore Default</button>
+      </div>
+
+      @if (successMessage()) {
+        <div class="message success">{{ successMessage() }}</div>
+      }
+
+      @if (errorMessage()) {
+        <div class="message error">{{ errorMessage() }}</div>
+      }
+    </div>
+
+    <div class="info-section">
+      <h2>Instructions</h2>
+      <ul>
+        <li>Select a day from the dropdown (1-32)</li>
+        <li>Enter a custom message for that day</li>
+        <li>Upload an image (JPG, PNG, etc. - max 5MB)</li>
+        <li>Click "Save" to store your changes</li>
+        <li>Click "Restore Default" to remove custom data</li>
+      </ul>
+      <p class="note">
+        <strong>Note:</strong> Images are stored in your browser's localStorage.
+        Custom data will persist until you clear your browser data or restore defaults.
+      </p>
+    </div>
+  </div>
+</div>
+
