@@ -76,10 +76,7 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.scss"
@@ -87,7 +84,11 @@
           }
         },
         "deploy": {
-          "builder": "angular-cli-ghpages:deploy"
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "dir": "dist/advent-calendar",
+            "branch": "gh-pages"
+          }
         }
       }
     }
