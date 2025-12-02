@@ -261,34 +261,3 @@
   }
 }
 
-@media (max-width: 968px) {
-  .admin-content {
-    grid-template-columns: 1fr;
-  }
-
-  .admin-header {
-    h1 {
-      font-size: 2rem;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .admin-container {
-    padding: 1rem 0.5rem;
-  }
-
-  .form-section,
-  .info-section {
-    padding: 1.5rem;
-  }
-
-  .form-actions {
-    flex-direction: column;
-
-    button {
-      width: 100%;
-    }
-  }
-}
-

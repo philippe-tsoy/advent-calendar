@@ -8,7 +8,7 @@ export interface CalendarDay {
 export const CALENDAR_DAYS: CalendarDay[] = [
   { day: 1, display: '1', message: 'Happy December bunbun! Here is a lil gift for you, your own advent calendar! I hope you enjoy it!', imagePath: 'assets/images/day-1.jpg' },
   { day: 2, display: '2', message: 'Your arms like a garland, your eyes like a star \n Dear, hold me closely and brighten my heart! ', imagePath: 'assets/images/day-2.jpg' },
-  { day: 3, display: '3', message: 'Day 3: Winter is coming! ❄️', imagePath: 'assets/images/day-3.jpg' },
+  { day: 3, display: '3', message: 'From Europe to Asia, from Asia to Europe, \n Summer or Winter, our side-quests are plural \n Your bright like the day, and relaxing like night \n Each instant with you is a lasting delight', imagePath: 'assets/images/day-3.jpg' },
   { day: 4, display: '4', message: 'Day 4: Cozy vibes ahead! 🧸', imagePath: 'assets/images/day-4.jpg' },
   { day: 5, display: '5', message: 'Day 5: Joy is in the air! 🎁', imagePath: 'assets/images/day-5.jpg' },
   { day: 6, display: '6', message: 'Day 6: Sparkle and shine! ✨', imagePath: 'assets/images/day-6.jpg' },
