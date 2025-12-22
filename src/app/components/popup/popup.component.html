@@ -1,11 +1,15 @@
 @if (visible()) {
   <div class="popup-overlay" (click)="onOverlayClick($event)">
-    <div #popupContent class="popup-content" [style.--origin-x]="originX || '50vw'" [style.--origin-y]="originY || '50vh'">
-      <button class="close-button" (click)="onClose()" aria-label="Close popup">×</button>
-      <div class="popup-image-container">
-        <img [src]="imagePath()" [alt]="'Day ' + message()" class="popup-image" />
+    <div #popupContent class="popup-content"
+         [style.--origin-x]="originX || '50vw'"
+         [style.--origin-y]="originY || '50vh'">
+      <button [class]="buttonClass()" (click)="onClose()" aria-label="Close popup">×</button>
+      <div [class]="contentContainerClass()">
+        <div class="popup-image-container">
+          <img [src]="imagePath()" [alt]="'Day ' + message()" class="popup-image" />
+        </div>
+        <div class="popup-message">{{ message() }}</div>
       </div>
-      <div class="popup-message">{{ message() }}</div>
     </div>
   </div>
 }

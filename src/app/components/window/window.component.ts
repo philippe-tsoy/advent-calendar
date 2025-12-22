@@ -12,7 +12,7 @@ export type WindowState = 'locked' | 'unlocked' | 'opened';
 })
 export class WindowComponent {
     private readonly colors = ['white', 'green', 'red'] as const;
-    private randomColor: (typeof this.colors)[number];
+    readonly randomColor: (typeof this.colors)[number];
 
     constructor() {
       // pick a color once per component instance
@@ -41,7 +41,7 @@ export class WindowComponent {
   isOpened = input.required<boolean>();
   imageUrl = input<string>('');
 
-  open = output<{ x: number; y: number }>();
+  open = output<{ x: number; y: number; color: 'red' | 'green' }>();
 
   state = computed<WindowState>(() => {
     if (this.isOpened()) {
@@ -60,7 +60,9 @@ export class WindowComponent {
 
   onClick(event: MouseEvent): void {
     if (this.state() !== 'locked') {
-      this.open.emit({ x: event.clientX, y: event.clientY });
+      // randomColor is always 'red' or 'green' due to constructor logic
+      const color: 'red' | 'green' = this.randomColor === 'white' ? 'red' : this.randomColor;
+      this.open.emit({ x: event.clientX, y: event.clientY, color });
     }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, input, output, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, effect } from '@angular/core';
+import { Component, input, output, ChangeDetectionStrategy, ViewChild, ElementRef, AfterViewInit, effect, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -18,6 +18,29 @@ export class PopupComponent {
   imagePath = input.required<string>();
   originX = input<string | null | undefined>();
   originY = input<string | null | undefined>();
+  doorColor = input<'red' | 'green' | null | undefined>();
+
+  contentContainerClass = computed(() => {
+    const baseClass = 'popup-content-container';
+    const color = this.doorColor();
+    if (color === 'red') {
+      return `${baseClass} popup-content-container--red`;
+    } else if (color === 'green') {
+      return `${baseClass} popup-content-container--green`;
+    }
+    return baseClass;
+  });
+
+  buttonClass = computed(() => {
+    const baseClass = 'close-button';
+    const color = this.doorColor();
+    if (color === 'red') {
+      return `${baseClass} close-button--green`;
+    } else if (color === 'green') {
+      return `${baseClass} close-button--red`;
+    }
+    return baseClass;
+  });
 
   @ViewChild('popupContent', { static: false }) popupContent!: ElementRef<HTMLElement>;
 

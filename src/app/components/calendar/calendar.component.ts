@@ -21,6 +21,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   readonly popupVisible = signal(false);
   readonly popupOriginX = signal<string | null>(null);
   readonly popupOriginY = signal<string | null>(null);
+  readonly popupDoorColor = signal<'red' | 'green' | null>(null);
 
   constructor(
     private readonly calendarDataService: CalendarDataService,
@@ -67,22 +68,42 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private refreshCalendarData(): void {
     const allDays = this.calendarDataService.getAllDays();
-    const first28 = this.shuffleDays(allDays.filter(d => d.day >= 1 && d.day <= 28));
-    const last4 = allDays.filter(d => d.day >= 29 && d.day <= 32).sort((a, b) => a.day - b.day);
+    
+    // Get the last 4 items from the array
+    const last4 = allDays.slice(-4);
+    
+    // Get all items except the last 4, then shuffle them
+    const first28 = this.shuffleDays(allDays.slice(0, -4));
 
+    // Build grid: CSS Grid with grid-auto-flow: column fills top to bottom, then left to right (column-major order)
+    // For an 8x4 grid with column-major filling:
+    // Position 0-3: Column 0 (rows 0-3)
+    // Position 4-7: Column 1 (rows 0-3)
+    // Position 8-11: Column 2 (rows 0-3)
+    // ...
+    // Position 28-31: Column 7 (rows 0-3) - rightmost column
     const grid: CalendarDayData[] = [];
-    let shuffledIdx = 0;
-    for (let row = 0; row < 4; row++) {
-      for (let col = 0; col < 8; col++) {
-        if (col < 7) {
-          if (shuffledIdx < first28.length) {
-            grid.push(first28[shuffledIdx++]);
-          }
+    const numRows = 4;
+    const numCols = 8;
+    
+    let first28Idx = 0;
+    let last4Idx = 0;
+    
+    // Fill column by column (column-major order)
+    for (let col = 0; col < numCols; col++) {
+      for (let row = 0; row < numRows; row++) {
+        if (col === 7) {
+          // Rightmost column (column 7): use last 4 items
+          grid.push(last4[last4Idx++]);
         } else {
-          grid.push(last4[row]);
+          // All other columns: use shuffled first 28 items
+          if (first28Idx < first28.length) {
+            grid.push(first28[first28Idx++]);
+          }
         }
       }
     }
+    
     this.calendarDays.set(grid);
   }
 
@@ -160,7 +181,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
     return this.openedDays().has(day);
   }
 
-  onWindowOpen(day: number, origin?: { x: number; y: number }): void {
+  onWindowOpen(day: number, origin?: { x: number; y: number; color?: 'red' | 'green' }): void {
     const dayData = this.calendarDataService.getDayData(day);
     if (dayData) {
       const wasAlreadyOpened = this.openedDays().has(day);
@@ -173,9 +194,13 @@ export class CalendarComponent implements OnInit, OnDestroy {
       if (origin) {
         this.popupOriginX.set(`${origin.x}px`);
         this.popupOriginY.set(`${origin.y}px`);
+        if (origin.color) {
+          this.popupDoorColor.set(origin.color);
+        }
       } else {
         this.popupOriginX.set(null);
         this.popupOriginY.set(null);
+        this.popupDoorColor.set(null);
       }
       if (wasAlreadyOpened) {
         this.popupVisible.set(true);
@@ -188,6 +213,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   onPopupClose(): void {
     this.popupVisible.set(false);
     this.selectedDay.set(null);
+    this.popupDoorColor.set(null);
   }
 
   getImageUrl(dayData: CalendarDayData): string {
@@ -199,5 +225,6 @@ export class CalendarComponent implements OnInit, OnDestroy {
     localStorage.removeItem('advent-calendar-opened');
     this.popupVisible.set(false);
     this.selectedDay.set(null);
+    this.popupDoorColor.set(null);
   }
 }

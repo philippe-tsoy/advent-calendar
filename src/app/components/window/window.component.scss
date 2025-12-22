@@ -1,27 +1,15 @@
-
-.window--green {
-  background-color: #6eff6b86;
-  border-color: #2ecc40;
-  --window-text-color: #ffffff;
-}
-
-.window--red {
-  background-color: #ff8a9685;
-  border-color: #ff6b6b;
-  --window-text-color: #ffffff;
-}
 /* Color-specific door fronts */
 
 .window--green .door-front {
-  background: linear-gradient(135deg, #d4ffd67c 0%, #6eff6b83 50%, #2ecc4075 100%);
+  background: linear-gradient(135deg, rgba(212, 255, 214, 0.586) 0%, rgba(110, 255, 107, 0.614) 50%, rgba(46, 204, 64, 0.559) 100%);
 }
 .window--green .door-front .day-number {
-  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
   text-shadow: none;
 }
 
 .window--red .door-front {
-  background: linear-gradient(135deg, #ff8a967e 0%, #ff6b9c7e 50%, #ff4b5d7e 100%);
+  background: linear-gradient(135deg, rgba(255, 138, 150, 0.594) 0%, rgba(255, 107, 156, 0.614) 50%, rgba(255, 75, 93, 0.594) 100%);
 }
 .window {
   width: 100%;
@@ -32,11 +20,16 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 3px dotted #ffffff70;
+  border: 3px dotted rgba(255, 255, 255, 0.439);
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
   perspective: 1000px;
+
+  @media (max-width: 480px) {
+    border-radius: 10px;
+    border-width: 2px;
+  }
 
   // &::before {
   //   content: '';
@@ -99,7 +92,7 @@
 .door-front {
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, #ff8a95 0%, #ff6b9d 50%, #ff8a95 100%);
+  background: linear-gradient(135deg, rgba(255, 138, 149, 1) 0%, rgba(255, 107, 157, 1) 50%, rgba(255, 138, 149, 1) 100%);
   // border: 3px solid #ff6b9d;
   border-radius: 15px;
   display: flex;
@@ -115,18 +108,30 @@
   backface-visibility: hidden;
   transform-style: preserve-3d;
 
-
+  @media (max-width: 480px) {
+    border-radius: 10px;
+    gap: 0.3rem;
+  }
   .day-number {
     font-size: 1.2rem;
     font-weight: bold;
-    color: #ffffff;
+    color: rgba(255, 255, 255, 1);
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     z-index: 1;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
   }
 
   .lock-icon {
     font-size: 1.2rem;
     opacity: 0.8;
+    y: 0.8;
     z-index: 1;
   }
 }
@@ -141,16 +146,36 @@
   height: 100%;
   object-fit: cover;
   border-radius: 12px;
+  opacity: 0;
+  transition: opacity 0.3s ease 0.8s;
+  position: relative;
+  z-index: 1;
+
+  @media (max-width: 480px) {
+    border-radius: 8px;
+  }
+}
+
+.window.opened .window-image {
+  opacity: 1;
 }
 
 .day-number {
   font-size: 2rem;
   font-weight: bold;
-  color: #5a5a5a;
+  color: rgba(90, 90, 90, 1);
   text-shadow: 0 2px 4px rgba(255, 255, 255, 0.5);
   display: block;
   width: 100%;
   text-align: center;
+
+  @media (max-width: 768px) {
+    font-size: 1.5rem;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.2rem;
+  }
 }
 
 .opened-indicator {
