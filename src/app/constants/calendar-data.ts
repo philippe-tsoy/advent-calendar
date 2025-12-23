@@ -28,7 +28,7 @@ export const CALENDAR_DAYS: CalendarDay[] = [
   { day: 20, display: '20', message: 'One mommy, one daddy, and one little fulwul\nAll three are in green, what a sweet family\nThey cherish each other and they kiss so often\nThat even the clouds smile at them hapily', imagePath: 'assets/images/day-20.jpg' },
   { day: 21, display: '21', message: 'There were many mirrors and all of them gorgeous\nSince they all reflected the love of my life\nAs long as she\'s here I won\'t need malls like Orchard\nFor all that I need can be found in my wife', imagePath: 'assets/images/day-21.jpg' },
   { day: 22, display: '22', message: 'True love is more present at airports than weddings\nSo come to this booth, let me immortalize\nOur smile and our hearts and our kisses in paintings\nFor every pic with you is a work of art', imagePath: 'assets/images/day-22.jpg' },
-  { day: 23, display: '23', message: 'Day 23: Almost there! ⏰', imagePath: 'assets/images/day-23.jpg' },
+  { day: 23, display: '23', message: 'To find a girl like you is like to find a unicorn\n You are so kind that you radiate a kind of unique glow \n Between an angel and you I won\'t find a difference\nYou are my rose and I\'m your little prince\n', imagePath: 'assets/images/day-23.jpg' },
   { day: 24, display: '24', message: 'Day 24: Christmas Eve! 🎄', imagePath: 'assets/images/day-24.jpg' },
   { day: 25, display: '25', message: 'Merry Christmas! 🎅', imagePath: 'assets/images/day-25.jpg' },
   { day: 26, display: '26', message: 'Day 26: Boxing Day! 📦', imagePath: 'assets/images/day-26.jpg' },
