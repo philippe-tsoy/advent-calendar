@@ -31,7 +31,7 @@ export const CALENDAR_DAYS: CalendarDay[] = [
   { day: 23, display: '23', message: 'To find a girl like you is like to find a unicorn\n You are so kind that you radiate a kind of unique glow \n Between an angel and you I won\'t find a difference\nYou are my rose and I\'m your little prince\n', imagePath: 'assets/images/day-23.jpg' },
   { day: 24, display: '24', message: 'I came and I left quick like the morning breeze\nA spark in the cover of old canopies\nPlease breathe in, embrace this short moment of peace\nA respise from chaos, a kiss in the mist', imagePath: 'assets/images/day-24.jpg' },
   { day: 25, display: '25', message: 'It\'s our second Christmas, and there shall be more\nMore pretty New Year trees and good gifts galore\nSo loe and behold how our story\'ll unfold\nAnd let me lead you to the ends of the world mi amor', imagePath: 'assets/images/day-25.jpg' },
-  { day: 26, display: '26', message: 'Day 26: Boxing Day! 📦', imagePath: 'assets/images/day-26.jpg' },
+  { day: 26, display: '26', message: 'Not even centuries with you would be enough for me\nThe skies could fall, the sun could burn, the seas could dry wholly \nThe ground could turn eternal white, or dry entirely \nBut you\'ll still be stuck in my heart, my brain, and all my dreams', imagePath: 'assets/images/day-26.jpg' },
   { day: 27, display: '27', message: 'Day 27: Holiday continues! 🎁', imagePath: 'assets/images/day-27.jpg' },
   { day: 28, display: '28', message: '5 days to New Year! 🎉', imagePath: 'assets/images/day-28.jpg' },
   { day: 29, display: '3 days to New Year!', message: '4 days to New Year! 🎉', imagePath: 'assets/images/day-29.jpg' },
