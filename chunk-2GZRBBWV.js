@@ -105,12 +105,13 @@ The moon will conduct this grand concert
 And every star will harmonize
 The song will soothe you, like an onsen
 Give you a glimpse of paradise`,imagePath:"assets/images/day-27.jpg"},{day:28,display:"28",message:`My arm is resting on your shoulders, my unconditional supports
- A canopy to shield your worries, you'll be protected from thee ghosts
-You'll never have to see their ire, their wrath will never reach your soul, So rest your weary eyes, so tired, come hide in my chest it's all yours
+ A canopy to shield your worries, you'll be protected from the ghosts
+You'll never have to see their ire, their wrath will never reach your soul
+ So rest your weary eyes, so tired, come hide in my chest it's all yours
 `,imagePath:"assets/images/day-28.jpg"},{day:29,display:"3 days to New Year!",message:`Big wife is huge like big man Blastoise
 Bug wife is looking up to me
 Huge eyes, small face, you make me wonder
-Will kids be copies? Hopefully`,imagePath:"assets/images/day-29.jpg"},{day:30,display:"2 days to New Year!",message:`In the darkness of space my ship navigates slowly
+Will kids be copies? Hopefully`,imagePath:"assets/images/day-29.jpg"},{day:30,display:"2 days to New Year!",message:`In the darkness of space, my ship navigates slowly
 From planet to planet in search of my rose
 Your smile, my sole beacon, it radiates, glows free
 As long as it's there, I'll know where is my home
