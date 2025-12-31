@@ -1,4 +1,4 @@
-import{L as d,a as i,b as l}from"./chunk-L7WXYAWM.js";var r=[{day:1,display:"1",message:"Happy December bunbun! Here is a lil gift for you, your own advent calendar! I hope you enjoy it!",imagePath:"assets/images/day-1.jpg"},{day:2,display:"2",message:`Your arms like a garland, your eyes like a star 
+import{L as d,a as i,b as l}from"./chunk-RT5VRARX.js";var r=[{day:1,display:"1",message:"Happy December bunbun! Here is a lil gift for you, your own advent calendar! I hope you enjoy it!",imagePath:"assets/images/day-1.jpg"},{day:2,display:"2",message:`Your arms like a garland, your eyes like a star 
  My dear, hold me closely and brighten my heart! `,imagePath:"assets/images/day-2.jpg"},{day:3,display:"3",message:`From Europe to Asia, from Asia to Europe, 
  Summer or Winter, our side-quests are plural 
  You're bright like the day, and you're shining like night 
