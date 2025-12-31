@@ -21,6 +21,7 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
   readonly isTitleTransitioning = signal<boolean>(false);
   readonly isFadingToBlack = signal<boolean>(false);
   readonly showNewYearMessage = signal<boolean>(false);
+  private imageLoadPromises = new Map<string, Promise<void>>();
   private allDays: CalendarDayData[] = [];
   private transitionTimings: number[] = [];
 
@@ -60,9 +61,15 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
     }
     const day = this.currentDay();
     if (day) {
-      // Replace .jpg with -sc.jpg in the image path
-      const basePath = day.imagePath.replace(/\.jpg$/, '-sc.png');
-      return basePath;
+      // Get the base image URL first (handles both regular paths and base64)
+      const baseImageUrl = this.calendarDataService.getImageUrl(day);
+      // Only create screenshot path if it's not a base64 image
+      if (baseImageUrl && !baseImageUrl.startsWith('data:')) {
+        // Replace .jpg with -sc.png in the image path
+        return baseImageUrl.replace(/\.jpg$/, '-sc.png');
+      }
+      // For base64 images, there's no screenshot version
+      return '';
     }
     return '';
   });
@@ -133,6 +140,23 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopAnimation();
+  }
+
+  private preloadImage(url: string): Promise<void> {
+    // Check if already cached
+    if (this.imageLoadPromises.has(url)) {
+      return this.imageLoadPromises.get(url)!;
+    }
+
+    const img = new Image();
+    const promise = new Promise<void>((resolve, reject) => {
+      img.onload = () => resolve();
+      img.onerror = () => reject();
+      img.src = url;
+    });
+
+    this.imageLoadPromises.set(url, promise);
+    return promise;
   }
 
   private preloadImages(): void {
@@ -226,13 +250,49 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
       return;
     }
 
-    // Wait for transition time, then increment index and hold for 80ms
+    // Wait for transition time, then preload next images and increment index
     this.animationTimer = window.setTimeout(() => {
-      this.currentIndex++;
-      this.currentDayIndex.set(this.currentIndex);
-      this.animationTimer = window.setTimeout(() => {
-        this.playSlideshow();
-      }, 80);
+      const nextIndex = this.currentIndex + 1;
+      if (nextIndex < this.allDays.length) {
+        // Preload both images for the next day before updating
+        const nextDay = this.allDays[nextIndex];
+        const leftUrl = this.calendarDataService.getImageUrl(nextDay);
+        const rightUrl = leftUrl && !leftUrl.startsWith('data:')
+          ? leftUrl.replace(/\.jpg$/, '-sc.png')
+          : '';
+
+        const preloadPromises: Promise<void>[] = [];
+
+        if (leftUrl && !leftUrl.startsWith('data:')) {
+          preloadPromises.push(this.preloadImage(leftUrl));
+        }
+        if (rightUrl) {
+          preloadPromises.push(this.preloadImage(rightUrl));
+        }
+
+        // Wait for both images to load, then update
+        Promise.all(preloadPromises).then(() => {
+          this.currentIndex = nextIndex;
+          this.currentDayIndex.set(this.currentIndex);
+          this.animationTimer = window.setTimeout(() => {
+            this.playSlideshow();
+          }, 80);
+        }).catch(() => {
+          // If preload fails, still update (images will load normally)
+          this.currentIndex = nextIndex;
+          this.currentDayIndex.set(this.currentIndex);
+          this.animationTimer = window.setTimeout(() => {
+            this.playSlideshow();
+          }, 80);
+        });
+      } else {
+        // No more days, just update index
+        this.currentIndex++;
+        this.currentDayIndex.set(this.currentIndex);
+        this.animationTimer = window.setTimeout(() => {
+          this.playSlideshow();
+        }, 80);
+      }
     }, this.transitionTimings[this.currentIndex] * 1000);
   }
 
