@@ -1,0 +1,334 @@
+.animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 1);
+  z-index: 2000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  overflow: hidden;
+  animation: fadeToBlack 3s ease-in-out;
+}
+
+@keyframes fadeToBlack {
+  0% {
+    background-color: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 1);
+  }
+}
+
+.animation-overlay.fade-to-black-overlay {
+  animation: fadeToFullyBlack 1s ease-in-out forwards;
+  background-color: rgba(0, 0, 0, 1);
+}
+
+@keyframes fadeToFullyBlack {
+  0% {
+    background-color: rgba(0, 0, 0, 1);
+  }
+  100% {
+    background-color: rgba(0, 0, 0, 1);
+  }
+}
+
+.animation-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  opacity: 0;
+  animation: fadeInContent 0.5s ease-in-out 3s forwards;
+}
+
+@keyframes fadeInContent {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.animation-container.fade-to-black {
+  animation: fadeToBlackContent 1s ease-in-out forwards;
+}
+
+@keyframes fadeToBlackContent {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.animation-container.fade-in-day32 {
+  animation: fadeInDay32 1s ease-in-out forwards;
+}
+
+@keyframes fadeInDay32 {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.new-year-message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #6eff6b;
+  font-size: 3rem;
+  font-weight: 600;
+  text-align: center;
+  z-index: 100;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: fadeInOutMessage 5s ease-in-out forwards;
+  white-space: nowrap;
+}
+
+@keyframes fadeInOutMessage {
+  0% {
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.hidden-during-message {
+  opacity: 0 !important;
+  transition: opacity 1s ease-in-out;
+}
+
+.full-screen-day32:not(.hidden-during-message) {
+  animation: fadeInDay32 1s ease-in-out forwards;
+}
+
+.animation-title:not(.hidden-during-message) {
+  transition: opacity 1s ease-in-out;
+}
+
+// Hide title when message is present (more reliable than :has selector)
+.new-year-message ~ .animation-title {
+  opacity: 0 !important;
+}
+
+.close-button {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 3000;
+  background: rgba(0, 0, 0, 0.5);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #ffffff;
+  transition: all 0.3s ease;
+  opacity: 0;
+  animation: fadeInContent 0.5s ease-in-out 3s forwards;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.7);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+.animation-title {
+  position: absolute;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #6eff6b; // Green color
+  font-size: 2.5rem;
+  font-weight: 600;
+  text-align: center;
+  z-index: 10;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  transition: opacity 0.5s ease-in-out;
+
+  &.fade-transition {
+    animation: fadeInOut 0.5s ease-in-out;
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.split-screen {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding-top: 6rem; // Space for title
+}
+
+.left-panel,
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.left-panel {
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.image-container {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.day-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-height: calc(100vh - 12rem);
+  aspect-ratio: 1008 / 2244;
+  display: block;
+}
+
+.day32-image {
+  max-height: calc(100vh - 8rem);
+}
+
+.message-container {
+  width: 100%;
+  max-width: 90%;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 138, 150, 0.55) 0%, rgba(255, 107, 156, 0.55) 50%, rgba(255, 75, 93, 0.55) 100%);
+  backdrop-filter: blur(5px);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.message-text {
+  text-align: center;
+  font-size: 1.25rem;
+  color: #ffffff;
+  font-weight: 500;
+  line-height: 1.6;
+  white-space: pre-line;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+  -webkit-font-smoothing: antialiased;
+}
+
+.full-screen-day32 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 6rem; // Space for title
+  padding: 2rem;
+  padding-top: 6rem;
+}
+
+// Responsive adjustments
+@media screen and (max-width: 768px) {
+  .animation-title {
+    font-size: 2rem;
+    top: 1.5rem;
+  }
+
+  .split-screen {
+    flex-direction: column;
+    padding-top: 5rem;
+  }
+
+  .left-panel {
+    border-right: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    flex: 1;
+  }
+
+  .right-panel {
+    flex: 1;
+  }
+
+  .day-image {
+    max-height: calc(50vh - 6rem);
+  }
+
+  .day32-image {
+    max-height: calc(100vh - 6rem);
+  }
+
+  .message-container {
+    padding: 1rem;
+  }
+
+  .message-text {
+    font-size: 1.1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .animation-title {
+    font-size: 1.5rem;
+    top: 1rem;
+  }
+
+  .left-panel,
+  .right-panel {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .message-container {
+    padding: 0.75rem;
+  }
+
+  .message-text {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+}
+

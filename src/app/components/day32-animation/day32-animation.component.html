@@ -1,0 +1,61 @@
+@if (visible()) {
+  <div class="animation-overlay" [class.fade-to-black-overlay]="isFadingToBlack() || isShowingDay32()">
+    <button class="close-button" (click)="close.emit()" aria-label="Close animation">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="animation-container" [class.fade-to-black]="isFadingToBlack()" [class.fade-in-day32]="isShowingDay32() && !isFadingToBlack()">
+      @if (showNewYearMessage()) {
+        <div class="new-year-message">Happy New Year my love!</div>
+      }
+      <div class="animation-title" [class.fade-transition]="isTitleTransitioning()" [class.hidden-during-message]="showNewYearMessage()">
+        {{ currentDate() }}
+      </div>
+      
+      @if (showSplitScreen()) {
+        <div class="split-screen">
+          <div class="left-panel">
+            <div class="image-container">
+              <img 
+                [src]="leftImagePath()" 
+                [alt]="'Day ' + currentDay()?.day"
+                class="day-image"
+                (error)="$event.target.style.display='none'"
+              />
+            </div>
+            <div class="message-container">
+              <div class="message-text">{{ currentMessage() }}</div>
+            </div>
+          </div>
+          
+          <div class="right-panel">
+            <div class="image-container">
+              @if (rightImagePath()) {
+                <img 
+                  [src]="rightImagePath()" 
+                  [alt]="'Day ' + currentDay()?.day + ' screenshot'"
+                  class="day-image"
+                  (error)="$event.target.style.display='none'"
+                />
+              }
+            </div>
+          </div>
+        </div>
+      } @else {
+        <div class="full-screen-day32" [class.hidden-during-message]="showNewYearMessage()">
+          <div class="image-container">
+            <img 
+              [src]="leftImagePath()" 
+              alt="Day 32"
+              class="day-image day32-image"
+              (error)="$event.target.style.display='none'"
+            />
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+

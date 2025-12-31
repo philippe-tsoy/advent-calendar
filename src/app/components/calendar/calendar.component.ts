@@ -2,11 +2,12 @@ import { Component, signal, computed, ChangeDetectionStrategy, effect, OnInit, O
 import { CommonModule } from '@angular/common';
 import { WindowComponent } from '../window/window.component';
 import { PopupComponent } from '../popup/popup.component';
+import { Day32AnimationComponent } from '../day32-animation/day32-animation.component';
 import { CalendarDataService, CalendarDayData } from '../../services/calendar-data.service';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, WindowComponent, PopupComponent],
+  imports: [CommonModule, WindowComponent, PopupComponent, Day32AnimationComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -22,6 +23,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   readonly popupOriginX = signal<string | null>(null);
   readonly popupOriginY = signal<string | null>(null);
   readonly popupDoorColor = signal<'red' | 'green' | null>(null);
+  readonly day32AnimationVisible = signal(false);
 
   constructor(
     private readonly calendarDataService: CalendarDataService,
@@ -68,10 +70,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
 
   private refreshCalendarData(): void {
     const allDays = this.calendarDataService.getAllDays();
-    
+
     // Get the last 4 items from the array
     const last4 = allDays.slice(-4);
-    
+
     // Get all items except the last 4, then shuffle them
     const first28 = this.shuffleDays(allDays.slice(0, -4));
 
@@ -85,10 +87,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     const grid: CalendarDayData[] = [];
     const numRows = 4;
     const numCols = 8;
-    
+
     let first28Idx = 0;
     let last4Idx = 0;
-    
+
     // Fill column by column (column-major order)
     for (let col = 0; col < numCols; col++) {
       for (let row = 0; row < numRows; row++) {
@@ -103,7 +105,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
         }
       }
     }
-    
+
     this.calendarDays.set(grid);
   }
 
@@ -164,17 +166,8 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   isUnlocked(day: number): boolean {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const calendarStartDate = new Date(currentYear, 11, 1);
-    const dayDate = new Date(calendarStartDate);
-    dayDate.setDate(calendarStartDate.getDate() + day - 1);
-    if (dayDate.getMonth() !== 11) {
-      dayDate.setFullYear(currentYear + 1);
-    }
-    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const dayDateOnly = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
-    return dayDateOnly <= todayDateOnly;
+    // All days are always unlocked
+    return true;
   }
 
   isOpened(day: number): boolean {
@@ -182,6 +175,19 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   onWindowOpen(day: number, origin?: { x: number; y: number; color?: 'red' | 'green' }): void {
+    // Special handling for day 32 - show animation instead of popup
+    if (day === 32) {
+      const wasAlreadyOpened = this.openedDays().has(day);
+      if (!wasAlreadyOpened) {
+        const currentOpened = new Set(this.openedDays());
+        currentOpened.add(day);
+        this.openedDays.set(currentOpened);
+      }
+      this.day32AnimationVisible.set(true);
+      return;
+    }
+
+    // Normal popup handling for other days
     const dayData = this.calendarDataService.getDayData(day);
     if (dayData) {
       const wasAlreadyOpened = this.openedDays().has(day);
@@ -214,6 +220,10 @@ export class CalendarComponent implements OnInit, OnDestroy {
     this.popupVisible.set(false);
     this.selectedDay.set(null);
     this.popupDoorColor.set(null);
+  }
+
+  onDay32AnimationClose(): void {
+    this.day32AnimationVisible.set(false);
   }
 
   getImageUrl(dayData: CalendarDayData): string {

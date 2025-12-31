@@ -9,7 +9,7 @@
       }
     </div>
   </div>
-  @if (state() === 'opened' && hasValidImage()) {
+  @if (state() === 'opened' && hasValidImage() && shouldShowImage()) {
       <img [src]="imageUrl()" [alt]="'Day ' + (display() || day())" class="window-image" />
   }
 </div>
