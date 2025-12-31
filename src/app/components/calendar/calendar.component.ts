@@ -166,8 +166,17 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   isUnlocked(day: number): boolean {
-    // All days are always unlocked
-    return true;
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    const calendarStartDate = new Date(currentYear, 11, 1);
+    const dayDate = new Date(calendarStartDate);
+    dayDate.setDate(calendarStartDate.getDate() + day - 1);
+    if (dayDate.getMonth() !== 11) {
+      dayDate.setFullYear(currentYear + 1);
+    }
+    const todayDateOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const dayDateOnly = new Date(dayDate.getFullYear(), dayDate.getMonth(), dayDate.getDate());
+    return dayDateOnly <= todayDateOnly;
   }
 
   isOpened(day: number): boolean {
