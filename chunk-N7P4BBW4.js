@@ -121,7 +121,7 @@ But as long as your smile will shine every morning
 My path will be set in stone, I'm yours, that's a fact`,imagePath:"assets/images/day-30.jpg"},{day:31,display:"1 day to New Year!",message:`I did ask it once, and I will ask it twice
 Where can I even find love?
 In between bites of Gyros, or a Bamischijf
-Or some fried rice; I can't have enough
+Or in kimchi fried rice on your stove?
 Was it frozen in time in so many photobooths
 Or spread in a song in the streets
 Miaw, miaw, miaw, miaw, miaw, miaw
