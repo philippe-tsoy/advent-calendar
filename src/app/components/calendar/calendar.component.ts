@@ -58,6 +58,48 @@ export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
       this.cdr.markForCheck();
     };
     window.addEventListener('calendar-data-updated', this.dataUpdateListener);
+
+    // Preload all animation images (especially PNG screenshots) early
+    this.preloadAnimationImages();
+  }
+
+  private preloadAnimationImages(): void {
+    // Preload all day images and screenshot images for the animation
+    const imagesToPreload: string[] = [];
+
+    for (let i = 1; i <= 32; i++) {
+      const dayData = this.calendarDataService.getDayData(i);
+      const imageUrl = this.calendarDataService.getImageUrl(dayData);
+      if (imageUrl && !imageUrl.startsWith('data:')) {
+        imagesToPreload.push(imageUrl);
+      }
+
+      // Preload screenshot images for days 1-31 (PNG format)
+      if (i <= 31) {
+        const scPath = imageUrl.replace(/\.jpg$/, '-sc.png');
+        if (scPath && !scPath.startsWith('data:')) {
+          imagesToPreload.push(scPath);
+        }
+      }
+    }
+
+    // Preload PNG screenshots first since they're slower to load
+    const pngImages = imagesToPreload.filter(url => url.includes('-sc.png'));
+    const jpgImages = imagesToPreload.filter(url => !url.includes('-sc.png'));
+
+    // Preload PNG images first with higher priority
+    pngImages.forEach(url => {
+      const img = new Image();
+      img.src = url;
+      // Force browser to prioritize this image
+      img.loading = 'eager' as any;
+    });
+
+    // Then preload JPG images
+    jpgImages.forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
   }
 
   ngAfterViewInit(): void {

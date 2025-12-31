@@ -137,23 +137,40 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
 
   private preloadImages(): void {
     // Preload all day images and screenshot images
+    const imagesToPreload: string[] = [];
+
     for (let i = 1; i <= 32; i++) {
       const dayData = this.calendarDataService.getDayData(i);
       const imageUrl = this.calendarDataService.getImageUrl(dayData);
       if (imageUrl && !imageUrl.startsWith('data:')) {
-        const img = new Image();
-        img.src = imageUrl;
+        imagesToPreload.push(imageUrl);
       }
 
-      // Preload screenshot images for days 1-31
+      // Preload screenshot images for days 1-31 (PNG format)
       if (i <= 31) {
-        const scPath = imageUrl.replace(/\.jpg$/, '-sc.jpg');
+        const scPath = imageUrl.replace(/\.jpg$/, '-sc.png');
         if (scPath && !scPath.startsWith('data:')) {
-          const scImg = new Image();
-          scImg.src = scPath;
+          imagesToPreload.push(scPath);
         }
       }
     }
+
+    // Preload all images with priority on PNG screenshots
+    // Load PNG screenshots first since they're slower
+    const pngImages = imagesToPreload.filter(url => url.includes('-sc.png'));
+    const jpgImages = imagesToPreload.filter(url => !url.includes('-sc.png'));
+
+    // Preload PNG images first
+    pngImages.forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
+
+    // Then preload JPG images
+    jpgImages.forEach(url => {
+      const img = new Image();
+      img.src = url;
+    });
   }
 
   private startAnimation(): void {
