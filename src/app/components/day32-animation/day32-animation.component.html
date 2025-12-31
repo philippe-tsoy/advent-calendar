@@ -1,5 +1,5 @@
 @if (visible()) {
-  <div class="animation-overlay" [class.fade-to-black-overlay]="isFadingToBlack() || isShowingDay32()">
+  <div class="animation-overlay" [class.fade-to-black-overlay]="isFadingToBlack() || isShowingDay32() || showNewYearMessage()">
     <button class="close-button" (click)="close.emit()" aria-label="Close animation">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -8,11 +8,22 @@
     </button>
     <div class="animation-container" [class.fade-to-black]="isFadingToBlack()" [class.fade-in-day32]="isShowingDay32() && !isFadingToBlack()">
       @if (showNewYearMessage()) {
+        <div class="fireworks-container">
+          @for (i of [1,2,3,4,5,6,7,8]; track i) {
+            <div class="firework" [style.--delay]="(i - 1) * 0.2 + 's'">
+              @for (j of [1,2,3,4,5,6,7,8]; track j) {
+                <div class="particle"></div>
+              }
+            </div>
+          }
+        </div>
         <div class="new-year-message">Happy New Year my love!</div>
       }
-      <div class="animation-title" [class.fade-transition]="isTitleTransitioning()" [class.hidden-during-message]="showNewYearMessage()">
-        {{ currentDate() }}
-      </div>
+      @if (!isShowingDay32()) {
+        <div class="animation-title" [class.fade-transition]="isTitleTransitioning()" [class.hidden-during-message]="showNewYearMessage()">
+          {{ currentDate() }}
+        </div>
+      }
       
       @if (showSplitScreen()) {
         <div class="split-screen">

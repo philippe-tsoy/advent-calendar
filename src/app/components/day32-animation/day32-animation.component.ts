@@ -83,45 +83,38 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
       this.calendarDataService.getDayData(i + 1)
     );
 
-    // Use exact transition timings
     this.transitionTimings = [
-      // Start faster, ~0.5s less than before
-      1.40,
-      1.22,
-      1.06,
-      0.91,
-      0.78,
+      3.50,
+      3.05,
+      2.65,
+      2.30,
+      2.00,
+      1.70,
+      1.45,
+      1.23,
+      1.05,
+      0.88,
+      0.75,
+      0.70,
       0.66,
-      0.55,
-      0.46,
-      0.38,
-      0.30,
-
-      // Smooth acceleration into middle speed
-      0.23,
-      0.21,
-      0.20,
-      0.20,
-      0.19,
-      0.19,
-      0.19,
-      0.19,
-      0.19,
-      0.20,
-      0.20,
-      0.21,
-      0.22,
-      0.23,
-      0.24,
-
-      // Slow down ONLY last 5
-      0.30,
-      0.38,
-      0.48,
-      0.60,
-      0.75
+      0.66,
+      0.62,
+      0.62,
+      0.62,
+      0.62,
+      0.62,
+      0.66,
+      0.66,
+      0.70,
+      0.72,
+      0.74,
+      0.76,
+      0.88,
+      1.10,
+      1.40,
+      1.75,
+      2.20
     ];
-
 
     // Watch visibility and start animation when visible
     effect(() => {
@@ -199,15 +192,11 @@ export class Day32AnimationComponent implements OnInit, OnDestroy {
 
           this.animationTimer = window.setTimeout(() => {
             // Show New Year message first, prepare day 32 but keep it hidden
+            // Set day 32 state first to keep overlay black, then set message
+            this.isShowingDay32.set(true); // Prepare day 32 content (keeps overlay black)
             this.isFadingToBlack.set(false);
             // Set message first to ensure title is hidden before day 32 content appears
             this.showNewYearMessage.set(true);
-            // Use requestAnimationFrame to ensure DOM updates before setting day 32
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                this.isShowingDay32.set(true); // Prepare day 32 content
-              });
-            });
             // After 5s (1s fade in + 3s visible + 1s fade out), hide message and show day 32
             this.animationTimer = window.setTimeout(() => {
               this.showNewYearMessage.set(false);

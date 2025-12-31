@@ -1,4 +1,4 @@
-import { Component, signal, computed, ChangeDetectionStrategy, effect, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy, effect, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WindowComponent } from '../window/window.component';
 import { PopupComponent } from '../popup/popup.component';
@@ -12,7 +12,8 @@ import { CalendarDataService, CalendarDayData } from '../../services/calendar-da
   styleUrl: './calendar.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarComponent implements OnInit, OnDestroy {
+export class CalendarComponent implements OnInit, OnDestroy, AfterViewInit {
+  @ViewChild('backgroundMusic') backgroundMusicRef?: ElementRef<HTMLAudioElement>;
   private storageListener?: (event: StorageEvent) => void;
   private dataUpdateListener?: () => void;
 
@@ -57,6 +58,35 @@ export class CalendarComponent implements OnInit, OnDestroy {
       this.cdr.markForCheck();
     };
     window.addEventListener('calendar-data-updated', this.dataUpdateListener);
+  }
+
+  ngAfterViewInit(): void {
+    // Try to play background music on startup
+    // Note: Most browsers require user interaction before playing audio
+    // This will attempt to play, but may fail silently until user interacts
+    if (this.backgroundMusicRef?.nativeElement) {
+      const audio = this.backgroundMusicRef.nativeElement;
+      audio.volume = 0.5; // Set volume to 50%
+
+      // Attempt to play (may fail due to browser autoplay restrictions)
+      audio.play().catch((error) => {
+        // Autoplay was prevented - this is normal in most browsers
+        // Music will start when user interacts with the page
+        console.log('Autoplay prevented. Music will start on user interaction.');
+
+        // Start playing on first user interaction
+        const startMusic = () => {
+          audio.play().catch(() => {});
+          document.removeEventListener('click', startMusic);
+          document.removeEventListener('touchstart', startMusic);
+          document.removeEventListener('keydown', startMusic);
+        };
+
+        document.addEventListener('click', startMusic, { once: true });
+        document.addEventListener('touchstart', startMusic, { once: true });
+        document.addEventListener('keydown', startMusic, { once: true });
+      });
+    }
   }
 
   ngOnDestroy(): void {
@@ -166,6 +196,7 @@ export class CalendarComponent implements OnInit, OnDestroy {
   }
 
   isUnlocked(day: number): boolean {
+    return true;
     const today = new Date();
     const currentYear = today.getFullYear();
     const calendarStartDate = new Date(currentYear, 11, 1);
